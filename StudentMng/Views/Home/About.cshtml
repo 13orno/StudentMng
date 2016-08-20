@@ -4,4 +4,81 @@
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<div ng-app="myApp">
+    <div ng-controller="AboutController">
+        
+
+        <form name="userForm" ng-submit="submitForm()" novalidate>
+            <!-- USERNAME -->
+            <div class="form-group" ng-class="{ 'has-error' : userForm.username.$invalid && !userForm.username.$pristine }">
+                <label>Name</label>
+                <input type="text" name="username" class="form-control" ng-model="user.username" ng-minlength="3" ng-maxlength="8">
+                <p ng-show="userForm.username.$error.minlength" class="help-block">Username is too short.</p>
+                <p ng-show="userForm.username.$error.maxlength" class="help-block">Username is too long.</p>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-group" ng-class="{ 'has-error' : userForm.email.$invalid && !userForm.email.$pristine }">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" ng-model="user.email" required>
+                <p ng-show="userForm.email.$invalid && !userForm.email.$pristine" class="help-block">Enter a valid email.</p>
+            </div>
+
+            <!-- PHONE -->
+            <div class="form-group" ng-class="{ 'has-error' : userForm.phone.$invalid && !userForm.phone.$pristine }">
+                <label>Phone</label>
+                <input type="text" name="phone" class="form-control" ng-model="user.phone" ng-minlength="11" ng-maxlength="20" required>
+                <p ng-show="userForm.phone.$error.minlength" class="help-block">Phone is too short.</p>
+                <p ng-show="userForm.phone.$error.maxlength" class="help-block">Phone is too long.</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid">Submit</button>
+
+        </form>
+
+        <hr />
+
+        <div class="bs-component">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>Search</label>
+                    <input type="text" ng-model="search" class="form-control" placeholder="Search">
+                </div>
+            </form>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th ng-click="sort('id')">
+                            Id
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='id'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('first_name')">
+                            First Name
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='first_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('last_name')">
+                            Last Name
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='last_name'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                        <th ng-click="sort('hobby')">
+                            Hobby
+                            <span class="glyphicon sort-icon" ng-show="sortKey=='hobby'" ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="user in users|orderBy:sortKey:reverse|filter:search|itemsPerPage:5">
+                        <td>{{user.id}}</td>
+                        <td>{{user.first_name}}</td>
+                        <td>{{user.last_name}}</td>
+                        <td>{{user.hobby}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls max-size="5"
+                                     direction-links="true"
+                                     boundary-links="true">
+            </dir-pagination-controls>
+        </div>
+</div>
+</div>
